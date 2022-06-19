@@ -23,12 +23,21 @@
 
         <!-- 問題 -->
         <section id="question" v-if="scenario[currentSlide].question">
-          <div>問題： {{scenario[currentSlide].question.question}}</div>
+          <div class="label">問題</div>
+          <div> {{scenario[currentSlide].question.question}}</div>
           <section class="choice">
             <button v-for="(choice,index) in scenario[currentSlide].question.choice" @click="makeChoice(index)"
               :disabled="choice.choiced" :class="{choiced: choice.choiced}">
               {{choice.text}}
             </button>
+          </section>
+
+          <!-- 正解したら表示 -->
+          <section id="explanation" v-show="showanswer">
+            <div class="label">正解：</div>
+            <div>{{scenario[currentSlide].question.answer.text}}</div>
+            <div class="label">解説</div>
+            <div>{{scenario[currentSlide].question.answer.explanation}}</div>
           </section>
         </section>
       </section>
@@ -42,8 +51,9 @@
 
         <!-- メッセージウィンドウ -->
         <section id="messagewindow" @click="nextPage">
-          <span class="messagetext">{{scenario[currentSlide].message[currentMessage].text}}</span>
-          <span id="nextbtn">▼</span>
+          <!-- <span class="messagetext">{{scenario[currentSlide].message[currentMessageIndex].text}}</span> -->
+          <span class="messagetext">{{currentMessage}}</span>
+          <span id="nextmes">▼</span>
         </section>
       </section>
     </section>
@@ -77,10 +87,12 @@
         showmenu: true,
         skipable: true, //スキップ可/不可
         autoskip: false, //オートスキップ
-        currentSlide: 0, //表示スライドページ
+        currentSlide: 3, //表示スライドページ
         currentImg: "", //表示スライド画像
-        currentMessage: 0, //表示メッセージ
+        currentMessageIndex: 0, //表示メッセージ
+        currentMessage: '', //表示メッセージ
         voice: new Audio(), //再生音声
+        showanswer: false
       },
       methods: {
         // サイドメニューの表示
@@ -91,34 +103,38 @@
         // サイドメニューでスライドジャンプ
         jampSlide(index) {
           this.currentSlide = index;
-          this.currentMessage = 0
+          this.currentMessageIndex = 0
+          this.isQuestion()
           this.voice.pause();
-          // 選択問題の場合はリセット
+          this.play()
+        },
+
+        // 問題かどうかチェック
+        isQuestion() {
           if (this.scenario[this.currentSlide].question) {
+            this.skipable = false;
+            this.showanswer = false
             for (i of this.scenario[this.currentSlide].question.choice) {
               i.choiced = false
             }
+          } else {
+            this.skipable = true;
           }
-          this.play()
         },
 
         // ページ送り
         nextPage() {
-          // 前の音が再生中だったら停止
-          this.voice.pause();
-          // 問題の場合はスキップ禁止
-          if (this.scenario[this.currentSlide].question) {
-            this.skipable = false;
-            return;
+          this.voice.pause(); // 前の音が再生中だったら停止
+          if (this.skipable) {
+            this.goNext();
           }
-          this.goNext()
         },
 
         // 分岐チェック
         goNext() { // 最終ページだったら停止
           if (
             this.currentSlide == this.scenario.length - 1 &&
-            this.currentMessage ==
+            this.currentMessageIndex ==
             this.scenario[this.currentSlide].message.length - 1
           ) {
             return;
@@ -127,25 +143,27 @@
           // ページ送り
           // スライド内の最後のメッセージだったら次のスライドへ
           if (
-            this.currentMessage ==
+            this.currentMessageIndex ==
             this.scenario[this.currentSlide].message.length - 1
           ) {
             this.currentSlide += 1;
-            this.currentMessage = 0;
+            this.currentMessageIndex = 0;
             // 通常は次のメッセージへ
           } else {
-            this.currentMessage += 1;
+            this.currentMessageIndex += 1;
           }
+          this.isQuestion();
           this.play()
         },
 
         // スライドと音声の再生
         play() {
+          this.currentMessage = this.scenario[this.currentSlide].message[this.currentMessageIndex].text
           // 表示するスライドと音声を設定
           this.currentImg = "scenario/img/" + this.scenario[this.currentSlide].slide;
           this.voice = new Audio(
             "scenario/voice/" +
-            this.scenario[this.currentSlide].message[this.currentMessage]
+            this.scenario[this.currentSlide].message[this.currentMessageIndex]
               .voice
           );
           this.voice.play();
@@ -154,6 +172,7 @@
           this.voice.addEventListener("ended", (event) => {
             // 選択問題がある場合はスキップしない
             if (this.scenario[this.currentSlide].question) {
+              this.skipable = false;
               return;
             } else if (this.autoskip) {
               this.nextPage();
@@ -168,14 +187,21 @@
 
         // 選択問題
         makeChoice(index) {
-          if (index == this.scenario[this.currentSlide].question.answer) {
+          if (index == this.scenario[this.currentSlide].question.answer.num) {
             this.voice = new Audio(
               "voice/せーかい.wav"
             );
             this.voice.play();
+            this.showanswer = true
             this.voice.addEventListener("ended", (event) => {
               this.skipable = true;
-              this.goNext();
+              this.currentMessage = this.scenario[this.currentSlide].question.answer.message
+              this.voice = new Audio(
+                "scenario/voice/" +
+                this.scenario[this.currentSlide].question.answer.voice
+              );
+              this.voice.play();
+              // this.goNext();
             });
           } else {
             this.voice = new Audio(
@@ -187,6 +213,9 @@
             index
           ].choiced = true;
         },
+      },
+      mounted() {
+        this.currentMessage = this.scenario[this.currentSlide].message[this.currentMessageIndex].text
       },
     });
   </script>

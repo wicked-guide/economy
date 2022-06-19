@@ -114,6 +114,18 @@
   border-radius: 10px;
 }
 
+#question .label {
+  background: aliceblue;
+  width: fit-content;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  padding: 0 0.5rem;
+}
+
+#question .label+div {
+  padding-left: 1rem;
+}
+
 #question .choice {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -139,6 +151,20 @@
 .choiced {
   margin-top: 0.2rem !important;
   border-bottom: 0.2rem solid rgb(247, 210, 162) !important;
+}
+
+#explanation {
+  margin-top: 0.5rem;
+}
+
+.nextbtn {
+  display: block;
+  margin: 0.5rem auto 0;
+  font-size: x-large;
+  padding: 0 0.5rem;
+  background-color: aliceblue;
+  border: solid lightblue;
+  border-radius: 10px;
 }
 
 /* メッセージ */
@@ -167,7 +193,7 @@
   white-space: pre-line;
 }
 
-#nextbtn {
+#nextmes {
   animation: blink 0.8s ease-in-out infinite alternate;
 }
 

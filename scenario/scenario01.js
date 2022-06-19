@@ -80,21 +80,22 @@ const scenario = [
           choiced: false,
         },
       ],
-      answer: 2,
-    },
-    message: [
-      {
-        text: "選択問題です",
-        voice: "013_春日部つむぎ（ノーマル）_選択問題です.wav",
+      answer: {
+        num: 2,
+        text: "Cなのかも！？",
+        explanation: "よくわかる解説！",
+        message: 'お見事です',
+        voice: "017_春日部つむぎ（ノーマル）_お見事です.wav"
       },
-    ],
+
+    },
   },
   {
     slide: "",
     message: [
       {
-        text: "お見事です",
-        voice: "017_春日部つむぎ（ノーマル）_お見事です.wav",
+        text: "現在はここまで",
+        voice: "",
       },
     ],
   },
