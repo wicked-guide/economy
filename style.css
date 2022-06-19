@@ -61,7 +61,6 @@
   border-radius: 5px;
   padding: 0 0.2rem;
   cursor: pointer;
-  /* border-bottom: solid 1px gray; */
 }
 
 .currentslide {
@@ -70,17 +69,11 @@
 
 /* レイアウト */
 .layout {
-  margin: auto;
   padding: 1rem;
   box-sizing: border-box;
   width: 100%;
-  /* max-width: 1020px; */
-  height: 100%;
   display: grid;
-  grid-template-rows: auto 200px;
-  gap: 0.5rem;
-
-
+  grid-template-rows: 1fr auto;
 }
 
 /* メインスライド */
@@ -172,7 +165,7 @@
   width: 100%;
   max-width: 880px;
   height: 200px;
-  margin: 0 auto;
+  margin: auto auto 0;
   display: grid;
   grid-template-rows: auto 1fr;
 }
