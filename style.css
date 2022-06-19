@@ -1,0 +1,200 @@
+/* 全体 */
+* {
+  margin: 0;
+  padding: 0;
+  user-select: none
+}
+
+/* 背景を固定 */
+.container {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-image: url(img/classroom.jpg);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+}
+
+/* レスポンシブ */
+@media screen and (max-width:480px) {
+  .container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  #slidemenu {
+    order: 1;
+  }
+
+  #slidemenu ul {
+    margin-left: auto;
+  }
+
+  .layout {
+    order: 2;
+  }
+}
+
+/* サイドメニュー */
+#slidemenu {
+  margin: 0.5rem;
+}
+
+#slidemenu .btn {
+  font-size: large;
+  padding: 0 0.3rem;
+}
+
+#slidemenu ul {
+  width: max-content;
+  background: whitesmoke;
+  padding: 0.5rem;
+  border-radius: 10px 0 10px 10px;
+  list-style: none;
+  max-height: 80vh;
+  overflow: auto;
+}
+
+#slidemenu ul li {
+  border-radius: 5px;
+  padding: 0 0.2rem;
+  cursor: pointer;
+  /* border-bottom: solid 1px gray; */
+}
+
+.currentslide {
+  background-color: bisque;
+}
+
+/* レイアウト */
+.layout {
+  margin: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  width: 100%;
+  /* max-width: 1020px; */
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 200px;
+  gap: 0.5rem;
+
+
+}
+
+/* メインスライド */
+#main {
+  height: 100%;
+  overflow: hidden;
+  display: grid;
+}
+
+#slide {
+  display: flex;
+}
+
+#slide img {
+  margin: auto;
+  width: 100%;
+  max-width: 880px;
+  max-height: calc(100vh - 250px);
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/* 選択問題 */
+#question {
+  height: fit-content;
+  width: fit-content;
+  margin: auto;
+  font-size: x-large;
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+#question .choice {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+#question .choice button {
+  font-size: x-large;
+  cursor: pointer;
+  background: antiquewhite;
+  border: solid bisque;
+  border-bottom: 0.4rem solid rgb(247, 210, 162);
+  border-radius: 10px;
+  padding: 0.5rem;
+}
+
+#question .choice button:hover {
+  margin-top: 0.2rem;
+  border-bottom: 0.2rem solid rgb(247, 210, 162);
+  transition: 0.2s;
+}
+
+.choiced {
+  margin-top: 0.2rem !important;
+  border-bottom: 0.2rem solid rgb(247, 210, 162) !important;
+}
+
+/* メッセージ */
+#message {
+  width: 100%;
+  max-width: 880px;
+  height: 200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+#messagewindow {
+  box-sizing: border-box;
+  background-color: black;
+  opacity: 0.8;
+  border-radius: 10px;
+  color: white;
+  padding: 1rem;
+  font-size: x-large;
+  height: 100%;
+  cursor: pointer;
+}
+
+.messagetext {
+  white-space: pre-line;
+}
+
+#nextbtn {
+  animation: blink 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* オートスキップ */
+#skipbtn {
+  border: solid darkcyan;
+  border-radius: 10px;
+  padding: 0.5rem;
+  display: block;
+  margin-left: auto;
+}
+
+.autoon {
+  background-color: aquamarine;
+}
+
+.autooff {
+  background-color: gray;
+  opacity: 0.8;
+}
