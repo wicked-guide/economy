@@ -2,7 +2,7 @@
 * {
   margin: 0;
   padding: 0;
-  user-select: none
+  user-select: none;
 }
 
 /* 背景を固定 */
@@ -18,7 +18,7 @@
 }
 
 /* レスポンシブ */
-@media screen and (max-width:480px) {
+@media screen and (max-width: 480px) {
   .container {
     display: grid;
     grid-template-rows: auto 1fr;
@@ -39,22 +39,25 @@
 
 /* サイドメニュー */
 #slidemenu {
-  margin: 0.5rem;
+  margin: 0.5rem 0.5rem 0.5rem 0;
 }
 
 #slidemenu .btn {
   font-size: large;
   padding: 0 0.3rem;
+  box-shadow: 1px 1px 4px;
+  margin-bottom: 2px;
 }
 
 #slidemenu ul {
   width: max-content;
+  max-height: 80vh;
+  overflow: auto;
   background: whitesmoke;
   padding: 0.5rem;
   border-radius: 10px 0 10px 10px;
+  box-shadow: 2px 2px 4px;
   list-style: none;
-  max-height: 80vh;
-  overflow: auto;
 }
 
 #slidemenu ul li {
@@ -79,7 +82,7 @@
 /* メインスライド */
 #main {
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
   display: grid;
 }
 
@@ -105,17 +108,18 @@
   background: white;
   padding: 1rem;
   border-radius: 10px;
+  box-shadow: 3px 3px 5px;
 }
 
 #question .label {
-  background: aliceblue;
+  background: lightblue;
   width: fit-content;
   border-radius: 10px;
   margin-bottom: 0.5rem;
   padding: 0 0.5rem;
 }
 
-#question .label+div {
+#question .label + div {
   padding-left: 1rem;
 }
 
@@ -164,7 +168,7 @@
 #message {
   width: 100%;
   max-width: 880px;
-  height: 200px;
+  height: 190px;
   margin: auto auto 0;
   display: grid;
   grid-template-rows: auto 1fr;
@@ -216,4 +220,15 @@
 .autooff {
   background-color: gray;
   opacity: 0.8;
+}
+
+/* ヘルパー */
+.m-1 {
+  margin: 0.5rem;
+}
+.mt-1 {
+  margin-top: 0.5rem;
+}
+.mb-1 {
+  margin-bottom: 0.5rem;
 }

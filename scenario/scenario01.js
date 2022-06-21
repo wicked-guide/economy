@@ -3,7 +3,9 @@ const scenario = [
     title: "はじめから",
     slide: "",
     message: [
-      { text: "ここをクリックしてね♪" },
+      {
+        text: "ここをクリックしてね♪",
+      },
       { text: "みなさん、こんにちわ", voice: "001_皆さんっこんにちは.wav" },
       {
         text: "学習ナビゲーターの春日部つむぎです",
@@ -84,10 +86,9 @@ const scenario = [
         num: 2,
         text: "Cなのかも！？",
         explanation: "よくわかる解説！",
-        message: 'お見事です',
-        voice: "017_春日部つむぎ（ノーマル）_お見事です.wav"
+        message: "お見事です",
+        voice: "017_春日部つむぎ（ノーマル）_お見事です.wav",
       },
-
     },
   },
   {

@@ -1,224 +1,250 @@
 <!DOCTYPE html>
 <html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="shortcut icon"
+      href="img/favicon.png"
+      type="image/vnd.microsoft.icon"
+    />
+    <title>経済学講座</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="shortcut icon" href="img/favicon.png" type="image/vnd.microsoft.icon" />
-  <title>経済学講座</title>
-</head>
-
-<body>
-  <section id="app" class="container">
-    <!-- 操作画面 -->
-    <section class="layout">
-      <!-- メイン領域 -->
-      <section id="main">
-        <!-- スライド -->
-        <section id="slide" v-show="scenario[currentSlide].slide">
-          <img :src="currentImg" />
-        </section>
-
-        <!-- 問題 -->
-        <section id="question" v-if="scenario[currentSlide].question">
-          <div class="label">問題</div>
-          <div> {{scenario[currentSlide].question.question}}</div>
-          <section class="choice">
-            <button v-for="(choice,index) in scenario[currentSlide].question.choice" @click="makeChoice(index)"
-              :disabled="choice.choiced" :class="{choiced: choice.choiced}">
-              {{choice.text}}
-            </button>
+  <body>
+    <section id="app" class="container">
+      <!-- 操作画面 -->
+      <section class="layout">
+        <!-- メイン領域 -->
+        <section id="main">
+          <!-- スライド -->
+          <section id="slide" v-show="scenario[currentSlide].slide">
+            <img :src="currentImg" />
           </section>
 
-          <!-- 正解したら表示 -->
-          <section id="explanation" v-show="showanswer">
-            <div class="label">正解：</div>
-            <div>{{scenario[currentSlide].question.answer.text}}</div>
-            <div class="label">解説</div>
-            <div>{{scenario[currentSlide].question.answer.explanation}}</div>
+          <!-- 問題 -->
+          <section id="question" v-if="scenario[currentSlide].question">
+            <div class="label">問題</div>
+            <div>{{scenario[currentSlide].question.question}}</div>
+            <section class="choice">
+              <button
+                v-for="(choice,index) in scenario[currentSlide].question.choice"
+                @click="makeChoice(index)"
+                :disabled="choice.choiced"
+                :class="{choiced: choice.choiced}"
+              >
+                {{choice.text}}
+              </button>
+            </section>
+
+            <!-- 正解したら表示 -->
+            <section id="explanation" v-show="showAnswer" class="mt-1">
+              <section class="mb-1">
+                <div class="label">正解</div>
+                <div>{{scenario[currentSlide].question.answer.text}}</div>
+              </section>
+              <section>
+                <div class="label">解説</div>
+                <div>
+                  {{scenario[currentSlide].question.answer.explanation}}
+                </div>
+              </section>
+            </section>
+          </section>
+        </section>
+
+        <!-- メッセージ領域 -->
+        <section id="message">
+          <!-- オートスキップ -->
+          <button
+            id="skipbtn"
+            @click="isSkip"
+            :class="autoskip ? 'autoon' : 'autooff'"
+          >
+            オートスキップ
+          </button>
+
+          <!-- メッセージウィンドウ -->
+          <section id="messagewindow" @click="nextPage">
+            <!-- <span class="messagetext">{{scenario[currentSlide].message[currentMessageIndex].text}}</span> -->
+            <span class="messagetext">{{currentMessage}}</span>
+            <span id="nextmes">▼</span>
           </section>
         </section>
       </section>
 
-      <!-- メッセージ領域 -->
-      <section id="message">
-        <!-- オートスキップ -->
-        <button id="skipbtn" @click="isSkip" :class="autoskip ? 'autoon' : 'autooff'">
-          オートスキップ
-        </button>
-
-        <!-- メッセージウィンドウ -->
-        <section id="messagewindow" @click="nextPage">
-          <!-- <span class="messagetext">{{scenario[currentSlide].message[currentMessageIndex].text}}</span> -->
-          <span class="messagetext">{{currentMessage}}</span>
-          <span id="nextmes">▼</span>
+      <!-- サイドメニュー -->
+      <section id="slidemenu">
+        <!-- 表示切替 -->
+        <section style="text-align: end">
+          <button class="btn" @click="isshowMenu">&equiv;</button>
         </section>
+
+        <!-- スライドタイトル -->
+        <ul v-show="showMenu">
+          <li
+            v-for="(slide,index) in scenario"
+            v-show="slide.title"
+            :class="{currentslide:index==currentSlide}"
+            @click="jampSlide(index)"
+          >
+            {{slide.title}}
+          </li>
+        </ul>
       </section>
     </section>
 
-    <!-- サイドメニュー -->
-    <section id="slidemenu">
-      <!-- 表示切替 -->
-      <section style="text-align: end;">
-        <button class="btn" @click="isShowMenu">&equiv;</button>
-      </section>
-
-      <!-- スライドタイトル -->
-      <ul v-show="showmenu">
-        <li v-for="(slide,index) in scenario" v-show="slide.title" :class="{currentslide:index==currentSlide}"
-          @click="jampSlide(index)">
-          {{slide.title}}
-        </li>
-      </ul>
-
-    </section>
-  </section>
-
-  <script src="js/vue.min.js"></script>
-  <!-- 外部：シナリオファイル -->
-  <script src="scenario/scenario01.js"></script>
-  <script>
-    var app = new Vue({
-      el: "#app",
-      data: {
-        scenario: scenario, //シナリオを外部読み込み
-        showmenu: true,
-        skipable: true, //スキップ可/不可
-        autoskip: false, //オートスキップ
-        currentSlide: 0, //表示スライドページ
-        currentImg: "", //表示スライド画像
-        currentMessageIndex: 0, //表示メッセージ
-        currentMessage: '', //表示メッセージ
-        voice: new Audio(), //再生音声
-        showanswer: false
-      },
-      methods: {
-        // サイドメニューの表示
-        isShowMenu() {
-          this.showmenu = !this.showmenu;
+    <script src="js/vue.min.js"></script>
+    <!-- 外部：シナリオファイル -->
+    <script src="scenario/scenario01.js"></script>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          scenario: scenario, //シナリオを外部読み込み
+          showMenu: true,
+          skipable: true, //スキップ可/不可
+          autoskip: false, //オートスキップ
+          currentSlide: 0, //表示スライドページ
+          currentImg: "", //表示スライド画像
+          currentMessageIndex: 0, //表示メッセージ
+          currentMessage: "", //表示メッセージ
+          voice: new Audio(), //再生音声
+          showAnswer: false,
         },
+        methods: {
+          // サイドメニューの表示
+          isshowMenu() {
+            this.showMenu = !this.showMenu;
+          },
 
-        // サイドメニューでスライドジャンプ
-        jampSlide(index) {
-          this.currentSlide = index;
-          this.currentMessageIndex = 0
-          this.isQuestion()
-          this.voice.pause();
-          this.play()
-        },
-
-        // 問題かどうかチェック
-        isQuestion() {
-          if (this.scenario[this.currentSlide].question) {
-            this.skipable = false;
-            this.showanswer = false
-            for (i of this.scenario[this.currentSlide].question.choice) {
-              i.choiced = false
-            }
-          } else {
-            this.skipable = true;
-          }
-        },
-
-        // ページ送り
-        nextPage() {
-          this.voice.pause(); // 前の音が再生中だったら停止
-          if (this.skipable) {
-            this.goNext();
-          }
-        },
-
-        // 分岐チェック
-        goNext() { // 最終ページだったら停止
-          if (
-            this.currentSlide == this.scenario.length - 1 &&
-            this.currentMessageIndex ==
-            this.scenario[this.currentSlide].message.length - 1
-          ) {
-            return;
-          }
-
-          // ページ送り
-          // スライド内の最後のメッセージだったら次のスライドへ
-          if (
-            this.currentMessageIndex ==
-            this.scenario[this.currentSlide].message.length - 1
-          ) {
-            this.currentSlide += 1;
+          // サイドメニューでスライドジャンプ
+          jampSlide(index) {
+            this.currentSlide = index;
             this.currentMessageIndex = 0;
-            // 通常は次のメッセージへ
-          } else {
-            this.currentMessageIndex += 1;
-          }
-          this.isQuestion();
-          this.play()
-        },
+            this.isQuestion();
+            this.voice.pause();
+            this.play();
+          },
 
-        // スライドと音声の再生
-        play() {
-          this.currentMessage = this.scenario[this.currentSlide].message[this.currentMessageIndex].text
-          // 表示するスライドと音声を設定
-          this.currentImg = "scenario/img/" + this.scenario[this.currentSlide].slide;
-          this.voice = new Audio(
-            "scenario/voice/" +
-            this.scenario[this.currentSlide].message[this.currentMessageIndex]
-              .voice
-          );
-          this.voice.play();
-
-          // オートスキップ
-          this.voice.addEventListener("ended", (event) => {
-            // 選択問題がある場合はスキップしない
+          // 問題かどうかチェック
+          isQuestion() {
             if (this.scenario[this.currentSlide].question) {
               this.skipable = false;
-              return;
-            } else if (this.autoskip) {
-              this.nextPage();
-            }
-          });
-        },
-
-        // オートスキップ切り替え
-        isSkip() {
-          this.autoskip = !this.autoskip;
-        },
-
-        // 選択問題
-        makeChoice(index) {
-          if (index == this.scenario[this.currentSlide].question.answer.num) {
-            this.voice = new Audio(
-              "voice/せーかい.wav"
-            );
-            this.voice.play();
-            this.showanswer = true
-            this.voice.addEventListener("ended", (event) => {
+              this.showAnswer = false;
+              for (i of this.scenario[this.currentSlide].question.choice) {
+                i.choiced = false;
+              }
+            } else {
               this.skipable = true;
-              this.currentMessage = this.scenario[this.currentSlide].question.answer.message
-              this.voice = new Audio(
-                "scenario/voice/" +
-                this.scenario[this.currentSlide].question.answer.voice
-              );
-              this.voice.play();
-              // this.goNext();
-            });
-          } else {
+            }
+          },
+
+          // ページ送り
+          nextPage() {
+            this.voice.pause(); // 前の音が再生中だったら停止
+            if (this.skipable) {
+              this.goNext();
+            }
+          },
+
+          // 分岐チェック
+          goNext() {
+            // 最終ページだったら停止
+            if (
+              this.currentSlide == this.scenario.length - 1 &&
+              this.currentMessageIndex ==
+                this.scenario[this.currentSlide].message.length - 1
+            ) {
+              return;
+            }
+
+            // ページ送り
+            // スライド内の最後のメッセージだったら次のスライドへ
+            if (
+              this.currentMessageIndex ==
+              this.scenario[this.currentSlide].message.length - 1
+            ) {
+              this.currentSlide += 1;
+              this.currentMessageIndex = 0;
+              // 通常は次のメッセージへ
+            } else {
+              this.currentMessageIndex += 1;
+            }
+            this.isQuestion();
+            this.play();
+          },
+
+          // スライドと音声の再生
+          play() {
+            this.currentMessage =
+              this.scenario[this.currentSlide].message[
+                this.currentMessageIndex
+              ].text;
+            // 表示するスライドと音声を設定
+            this.currentImg =
+              "scenario/img/" + this.scenario[this.currentSlide].slide;
             this.voice = new Audio(
-              "voice/はっずれーー.wav"
+              "scenario/voice/" +
+                this.scenario[this.currentSlide].message[
+                  this.currentMessageIndex
+                ].voice
             );
             this.voice.play();
-          }
-          this.scenario[this.currentSlide].question.choice[
-            index
-          ].choiced = true;
-        },
-      },
-      mounted() {
-        this.currentMessage = this.scenario[this.currentSlide].message[this.currentMessageIndex].text
-      },
-    });
-  </script>
-</body>
 
+            // オートスキップ
+            this.voice.addEventListener("ended", (event) => {
+              // 選択問題がある場合はスキップしない
+              if (this.scenario[this.currentSlide].question) {
+                this.skipable = false;
+                return;
+              } else if (this.autoskip) {
+                this.nextPage();
+              }
+            });
+          },
+
+          // オートスキップ切り替え
+          isSkip() {
+            this.autoskip = !this.autoskip;
+          },
+
+          // 選択問題
+          makeChoice(index) {
+            if (index == this.scenario[this.currentSlide].question.answer.num) {
+              this.voice = new Audio("voice/せーかい.wav");
+              this.voice.play();
+
+              this.voice.addEventListener("ended", (event) => {
+                this.showAnswer = true;
+                this.skipable = true;
+                this.currentMessage =
+                  this.scenario[this.currentSlide].question.answer.message;
+                this.voice = new Audio(
+                  "scenario/voice/" +
+                    this.scenario[this.currentSlide].question.answer.voice
+                );
+                this.voice.play();
+                // this.goNext();
+              });
+            } else {
+              this.voice = new Audio("voice/はっずれーー.wav");
+              this.voice.play();
+            }
+            this.scenario[this.currentSlide].question.choice[
+              index
+            ].choiced = true;
+          },
+        },
+        mounted() {
+          this.currentMessage =
+            this.scenario[this.currentSlide].message[
+              this.currentMessageIndex
+            ].text;
+        },
+      });
+    </script>
+  </body>
 </html>
