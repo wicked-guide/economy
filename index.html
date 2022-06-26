@@ -68,8 +68,17 @@
 
           <!-- メッセージウィンドウ -->
           <section id="messagewindow" @click="nextPage">
-            <span class="messagetext">{{currentMessage}}</span>
-            <span id="nextmes">▼</span>
+            <!-- キャラクター -->
+            <img
+              src="img/actor/春日部つむぎ-01.png"
+              class="actor"
+              v-show="showActor"
+            />
+            <!-- メッセージテキスト -->
+            <section class="messagetext">
+              <span>{{currentMessage}}</span>
+              <span id="nextmes">▼</span>
+            </section>
           </section>
         </section>
       </section>
@@ -97,21 +106,24 @@
 
     <script src="js/vue.min.js"></script>
     <!-- 外部：シナリオファイル -->
-    <script src="scenario/scenario01.js"></script>
+    <script src="scenario/scenario01/scenario.js"></script>
+
     <script>
       var app = new Vue({
         el: "#app",
         data: {
+          isScenario: "scenario01", //外部シナリオを選択
           scenario: scenario, //シナリオを外部読み込み
-          showMenu: true,
-          skipable: true, //スキップ可/不可
-          autoskip: false, //オートスキップ
           currentSlide: 0, //表示スライドページ
           currentImg: "", //表示スライド画像
           currentMessageIndex: 0, //表示メッセージ
           currentMessage: "", //表示メッセージ
+          showActor: true, //キャラ表示
           voice: new Audio(), //再生音声
-          showAnswer: false,
+          showMenu: true, //サイドメニュー表示
+          skipable: true, //スキップ可/不可
+          autoskip: false, //オートスキップ
+          showAnswer: false, //正解と解説の表示
         },
         methods: {
           // サイドメニューの表示
@@ -184,9 +196,14 @@
               ].text;
             // 表示するスライドと音声を設定
             this.currentImg =
-              "scenario/img/" + this.scenario[this.currentSlide].slide;
+              "scenario/" +
+              this.isScenario +
+              "/img/" +
+              this.scenario[this.currentSlide].slide;
             this.voice = new Audio(
-              "scenario/voice/" +
+              "scenario/" +
+                this.isScenario +
+                "/voice/" +
                 this.scenario[this.currentSlide].message[
                   this.currentMessageIndex
                 ].voice
@@ -212,32 +229,38 @@
 
           // 選択問題
           makeChoice(index) {
+            // 正解した時
             if (index == this.scenario[this.currentSlide].question.answer.num) {
               this.voice = new Audio("voice/せーかい.wav");
               this.voice.play();
 
+              // 正解と解説を表示し、先に進めるようになる
               this.voice.addEventListener("ended", (event) => {
                 this.showAnswer = true;
                 this.skipable = true;
                 this.currentMessage =
                   this.scenario[this.currentSlide].question.answer.message;
                 this.voice = new Audio(
-                  "scenario/voice/" +
+                  "scenario/" +
+                    this.isScenario +
+                    "/voice/" +
                     this.scenario[this.currentSlide].question.answer.voice
                 );
                 this.voice.play();
-                // this.goNext();
               });
+              // 不正解の時は進まない
             } else {
               this.voice = new Audio("voice/はっずれーー.wav");
               this.voice.play();
             }
+            // 選択した選択肢を非活性化
             this.scenario[this.currentSlide].question.choice[
               index
             ].choiced = true;
           },
         },
         mounted() {
+          // 最初のメッセージを表示
           this.currentMessage =
             this.scenario[this.currentSlide].message[
               this.currentMessageIndex
