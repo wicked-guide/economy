@@ -89,8 +89,9 @@
 }
 
 #slide {
+  margin-right: 3px;
   margin-bottom: 0.5rem;
-  background: white;
+  background: darkslategrey;
   display: flex;
   border-radius: 10px;
   box-shadow: 3px 3px 5px;
@@ -110,14 +111,16 @@
   width: fit-content;
   margin: auto;
   font-size: x-large;
-  background: white;
+  /* background: white; */
+  background: darkslategrey;
+  color: white;
   padding: 1rem;
   border-radius: 10px;
-  box-shadow: 3px 3px 5px;
+  box-shadow: 3px 3px 5px black;
 }
 
 #question .label {
-  background: lightblue;
+  background: slategrey;
   width: fit-content;
   border-radius: 10px;
   margin-bottom: 0.5rem;
@@ -156,12 +159,12 @@
 }
 
 #explanation {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .nextbtn {
   display: block;
-  margin: 0.5rem auto 0;
+  margin: 1rem auto 0;
   font-size: x-large;
   padding: 0 0.5rem;
   background-color: aliceblue;
