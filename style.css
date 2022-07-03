@@ -76,7 +76,7 @@
   padding: 1rem;
   box-sizing: border-box;
   width: 100%;
-  max-width: 1010px;
+  max-width: 1020px;
   display: grid;
   grid-template-rows: 1fr auto;
 }
@@ -100,7 +100,7 @@
 #slide img {
   margin: auto;
   width: 100%;
-  max-width: 880px;
+  /* max-width: 880px; */
   max-height: calc(100vh - 250px);
   object-fit: contain;
 }
