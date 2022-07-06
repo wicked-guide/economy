@@ -29,14 +29,24 @@
             <div class="label">問題</div>
             <div>{{scenario[currentSlide].question.question}}</div>
             <section class="choice">
-              <button
+              <template
                 v-for="(choice,index) in scenario[currentSlide].question.choice"
-                @click="makeChoice(index)"
-                :disabled="choice.choiced"
-                :class="{choiced: choice.choiced}"
               >
-                {{choice.text}}
-              </button>
+                <div class="btn">
+                  <span
+                    class="correct"
+                    v-show="showAnswer&&index==scenario[currentSlide].question.answer.num"
+                    >✔</span
+                  >
+                  <button
+                    @click="makeChoice(index)"
+                    :disabled="choice.choiced"
+                    :class="{choiced: choice.choiced}"
+                  >
+                    {{choice.text}}
+                  </button>
+                </div>
+              </template>
             </section>
 
             <!-- 正解したら表示 -->
@@ -45,7 +55,9 @@
                 <div class="label">正解</div>
                 <div>{{scenario[currentSlide].question.answer.text}}</div>
               </section>
-              <section>
+              <section
+                v-show="scenario[currentSlide].question.answer.explanation"
+              >
                 <div class="label">解説</div>
                 <div>
                   {{scenario[currentSlide].question.answer.explanation}}
@@ -69,7 +81,7 @@
           <!-- メッセージウィンドウ -->
           <section id="messagewindow" @click="nextPage">
             <!-- キャラクター -->
-            <img src="img/actor/女性.png" class="actor" v-show="showActor" />
+            <img :src="actor" class="actor" v-show="showActor" />
             <!-- メッセージテキスト -->
             <section class="messagetext">
               <span>{{currentMessage}}</span>
@@ -110,6 +122,7 @@
         data: {
           isScenario: "economy", //外部シナリオを選択
           scenario: scenario, //シナリオを外部読み込み
+          actor: "img/actor/春日部つむぎ-01.png",
           currentSlide: 0, //表示スライドページ
           currentImg: "", //表示スライド画像
           currentMessageIndex: 0, //表示メッセージ
@@ -138,8 +151,10 @@
 
           // 問題かどうかチェック
           isQuestion() {
+            // もし問題だったら
             if (this.scenario[this.currentSlide].question) {
-              this.skipable = false;
+              this.skipable = false; // スキップ禁止
+              // 正解初期化
               this.showAnswer = false;
               for (i of this.scenario[this.currentSlide].question.choice) {
                 i.choiced = false;
@@ -225,6 +240,7 @@
 
           // 選択問題
           makeChoice(index) {
+            this.voice.pause();
             // 正解した時
             if (index == this.scenario[this.currentSlide].question.answer.num) {
               this.voice = new Audio("voice/せーかい.wav");

@@ -129,12 +129,18 @@
 
 #question .label + div {
   padding-left: 1rem;
+  white-space: pre-line;
 }
 
 #question .choice {
+  margin: 1rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* grid-template-columns: 1fr 1fr; */
   gap: 1rem;
+}
+
+#question .choice .btn {
+  display: grid;
 }
 
 #question .choice button {
@@ -156,6 +162,14 @@
 .choiced {
   margin-top: 0.2rem !important;
   border-bottom: 0.2rem solid rgb(247, 210, 162) !important;
+}
+
+.correct {
+  position: absolute;
+  color: forestgreen;
+  font-size: xx-large;
+  padding: 0.5rem;
+  font-weight: bolder;
 }
 
 #explanation {
