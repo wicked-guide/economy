@@ -18,7 +18,7 @@ const scenario = [
   },
   {
     title: "簡単な導入",
-    slide: "経済学-01.png",
+    slide: "経済学-01-01.png",
     message: [
       {
         text: "経済学と聞くと「何だか難しそうだな」と思う人が多いかもしれません\nでも実は、とても身近なことなんですよ",
@@ -48,7 +48,7 @@ const scenario = [
   },
   {
     title: "経済とは？",
-    slide: "経済学-02.png",
+    slide: "経済学-01-02.png",
     message: [
       {
         text: "「経済」という言葉の由来は、\n中国の「経世済民」という言葉です",
@@ -70,7 +70,7 @@ const scenario = [
   },
   {
     title: "政治と経済",
-    slide: "経済学-03.png",
+    slide: "経済学-01-03.png",
     message: [
       {
         text: "政治とは、私たちの代表者である政治家たちが、\n社会に必要なルールを作って実行していくことです",
@@ -100,7 +100,7 @@ const scenario = [
   },
   {
     title: "例：貧富の格差",
-    slide: "経済学-04.png",
+    slide: "経済学-01-04.png",
     message: [
       {
         text: "例えば「貧富の格差」という問題で考えてみましょう",
@@ -134,7 +134,7 @@ const scenario = [
   },
   {
     title: "万引きへの対応",
-    slide: "経済学-05.png",
+    slide: "経済学-01-05.png",
     message: [
       {
         text: "もう少し掘り下げてみましょう",
@@ -191,7 +191,7 @@ const scenario = [
   },
   {
     title: "色々な対応",
-    slide: "経済学-06.png",
+    slide: "経済学-01-06.png",
     message: [
       {
         text: "それぞれ確認していきましょう",
@@ -277,7 +277,7 @@ const scenario = [
   },
   {
     title: "win-win",
-    slide: "経済学-07.png",
+    slide: "経済学-01-07.png",
     message: [
       {
         text: "もっと単純に「助け合い」と言ってもいいのかもしれませんが、「助け合い」には自己犠牲の精神が含まれがちです",
@@ -323,7 +323,7 @@ const scenario = [
   },
   {
     title: "経済はカオス",
-    slide: "経済学-08.png",
+    slide: "経済学-01-08.png",
     message: [
       {
         text: "「立場も考え方も違う人たちが、\nそれぞれ自分が得をするために、他人を手助けしていく",
@@ -349,7 +349,7 @@ const scenario = [
   },
   {
     title: "次回予告",
-    slide: "経済学-12.png",
+    slide: "経済学-01-09.png",
     message: [
       {
         text: "いかがだったでしょうか\n今回は「経済の最も根本的な考え方」の部分についてお話ししました",
@@ -367,7 +367,7 @@ const scenario = [
   },
   {
     title: "",
-    slide: "経済学-13.png",
+    slide: "経済学-01-10.png",
     message: [
       {
         text: "ということで本日はここまで\nお付き合いいただき、ありがとうございました",
